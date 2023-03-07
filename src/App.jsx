@@ -11,7 +11,7 @@ function App() {
 
   const handleCambiarVistas =(e)=> {
     const idVista = e.target.id; 
-    console.log(idVista);
+    console.log("idVista --------", idVista);
     setCompActual(componentes[idVista])
 
   } 
@@ -28,14 +28,6 @@ function App() {
     })
     setCompActual(componentes.menu)
   }
-
-
-
-  useEffect(() => {
-    console.log(compActual);
-  }, [compActual]);
-
- 
 
   return (
     !usuario ? <Login handleLogin={handleLogin} /> : compActual 

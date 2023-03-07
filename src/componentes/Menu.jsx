@@ -1,6 +1,7 @@
 import actividades from "../data/actividades.json";
 
-export default function Menu({handleCambiarVistas}) {
+export default function Menu({handleCambiarVistas}) {    
+
   return (
     <div className="container">
       <div className="row">

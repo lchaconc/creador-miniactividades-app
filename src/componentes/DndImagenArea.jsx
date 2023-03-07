@@ -4,7 +4,7 @@ import { eGenericos, eDnDImagenArea } from "../_endpoints";
 import Accordion from "react-bootstrap/Accordion";
 
 const data = { nombrePlantilla: "dnd_imagen_area" };
-let idApp;
+let isFirst = true;
 
 export default function DndImagenArea() {
   const modo = "insertar";
@@ -19,38 +19,17 @@ export default function DndImagenArea() {
 
   const [textos, setTextos] = useState(null);
   const [areas, setAreas] = useState(null);
+  const [idApp, setIdApp] = useState(null);
 
 
-  /*
-  useEffect( async () => {
-    console.log("setup");
-    if (modo === "insertar") {
-        console.log("<<<< INSERTAR >>>>");
-      //const res = await sendData(eGenericos.crearProyecto, data, "POST");
-      //console.log("idApp", res.idApp);
-    }
-    if (modo === "editar") {
-      setTextos(await getData(eDnDImagenArea.textos));
-      setAreas(await getData(eDnDImagenArea.areas));
-    }
-  }, []);
-  */
-
+ 
 
   useEffect(() => {
-    const setup = async () => {
-      console.log("setup");
-      if (modo === "insertar") {
-        const res = await sendData(eGenericos.crearProyecto, data, "POST");
-        console.log("idApp", res.idApp);
-      }
-      if (modo === "editar") {
-        setTextos(await getData(eDnDImagenArea.textos));
-        setAreas(await getData(eDnDImagenArea.areas));
-      }
-    };
-    setup();
-  }, [modo]);
+    if (isFirst) {       
+        isFirst = false;
+        setup();       
+    }    
+  }, []);
 
 
 
@@ -59,15 +38,15 @@ export default function DndImagenArea() {
   }, [textos]);
 
   useEffect(() => {
-    console.log("AREAS", areas);
+    //console.log("AREAS", areas);
   }, [areas]);
 
   const setup = async () => {
     console.log("setup");
     if (modo === "insertar") {
         console.log("<<<< INSERTAR >>>>");
-      //const res = await sendData(eGenericos.crearProyecto, data, "POST");
-      //console.log("idApp", res.idApp);
+      const res = await sendData(eGenericos.crearProyecto, data, "POST");
+      setIdApp(await res.idApp);      
     }
     if (modo === "editar") {
       setTextos(await getData(eDnDImagenArea.textos));
@@ -95,7 +74,7 @@ export default function DndImagenArea() {
       retroIncorrecta: refRetroincorrecta.current.value,
     };
     console.log("datos a enviar al servidor", data);
-    const res = await sendData(eDnDImagenArea.textos, data);
+    const res = await sendData(eDnDImagenArea.textos+idApp, data);
     console.log(res);
   };
 
@@ -123,6 +102,14 @@ export default function DndImagenArea() {
     setAreas(await getData(eDnDImagenArea.areas));
   };
 
+  const handlePreview = async ()=> {
+    if (idApp) {
+        const res = await getData ( eGenericos.verProyecto+idApp );
+        window.open(res.url, '_blank');
+    }
+
+  }
+
   return (
     <div className="container">
       <div className="row">
@@ -142,15 +129,11 @@ export default function DndImagenArea() {
 
       <div className="row">
         <div className="col-12 text-end">
-          {/*
-            <Link
-              target="_blank"
-              rel="noopener noreferrer"
-              href="/actividades/dnd-imagen-area/home"
-            >
-              <img className="img-fluid" src="/assets/eyes.png" alt="Ojos" />
-            </Link>
-            */}
+            <img 
+            role={"button"}
+            onClick={handlePreview}            
+            className="img-fluid" 
+            src="/assets/play.png" alt="boón play" />          
         </div>
       </div>
 
