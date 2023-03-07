@@ -85,11 +85,11 @@ export default function DndImagenArea() {
       color: refColorAreaTexto.current.value,
     };
     console.log("Datos a enviar", data);
-    const res = await sendData(eDnDImagenArea.areas, data, "POST");
+    const res = await sendData(eDnDImagenArea.areas+idApp, data, "POST");
     console.log("res", res);
 
     //REacarga nuevamente las areas con datos del backend
-    setAreas(await getData(eDnDImagenArea.areas));
+    setAreas(await getData(eDnDImagenArea.areas+idApp ));
   };
 
   const handleEliminarArea = async (e) => {
@@ -106,6 +106,14 @@ export default function DndImagenArea() {
     if (idApp) {
         const res = await getData ( eGenericos.verProyecto+idApp );
         window.open(res.url, '_blank');
+    }
+
+  }
+
+  const handleBuild = async () => {
+    if (idApp) {
+      const res = await getData (eGenericos.genererProyecto+idApp);
+      window.open(res.url, '_blank');      
     }
 
   }
@@ -128,7 +136,15 @@ export default function DndImagenArea() {
       </div>
 
       <div className="row">
-        <div className="col-12 text-end">
+        <div className="col-11 text-end">
+          <img 
+          role={"button"}
+          onClick={handleBuild}
+          className="img-fluid"
+          src="./assets/nube.png"           
+          alt="nube de descarga" />
+        </div>
+        <div className="col-1 text-end">
             <img 
             role={"button"}
             onClick={handlePreview}            
