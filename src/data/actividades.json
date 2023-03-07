@@ -1,0 +1,19 @@
+[
+    {
+        "id": "dnd-imagen-area",
+        "nombre": "Arrastre y suelte imágenes",
+        "descripcion": "Esta es una prueba, bla bla bla."        
+    },
+    {
+        "id": "dnd-texto-imagen",
+        "nombre": "Arrastre el texto debajo de la imagen",
+        "descripcion": "Esta es una prueba, bla bla bla."        
+    },
+    {
+        "id": "sel-parrafo",
+        "nombre": "Seleccione la opción correcta",
+        "descripcion": "Esta es una prueba, bla bla bla."        
+
+    }
+
+]
