@@ -1,24 +1,58 @@
 import React, { useRef, useState, useEffect } from "react";
 import { sendData, getData } from "gespro-utils";
-import {dnDImagenArea} from "../_endpoints";
+import { eGenericos, eDnDImagenArea } from "../_endpoints";
 import Accordion from "react-bootstrap/Accordion";
 
-export default function DndImagenArea(params) {
+const data = { nombrePlantilla: "dnd_imagen_area" };
+let idApp;
 
-    const refTextosTitulo = useRef();
-    const refTextosInstrucciones = useRef();
-    const refRetroCorrecta = useRef();
-    const refRetroincorrecta = useRef();
-    const refTituloArea = useRef();
-    const refColorAreaFondo = useRef();
-    const refColorAreaTexto = useRef();
+export default function DndImagenArea() {
+  const modo = "insertar";
 
-    const [textos, setTextos] = useState(null);
-    const [areas, setAreas] = useState(null);
+  const refTextosTitulo = useRef();
+  const refTextosInstrucciones = useRef();
+  const refRetroCorrecta = useRef();
+  const refRetroincorrecta = useRef();
+  const refTituloArea = useRef();
+  const refColorAreaFondo = useRef();
+  const refColorAreaTexto = useRef();
+
+  const [textos, setTextos] = useState(null);
+  const [areas, setAreas] = useState(null);
+
+
+  /*
+  useEffect( async () => {
+    console.log("setup");
+    if (modo === "insertar") {
+        console.log("<<<< INSERTAR >>>>");
+      //const res = await sendData(eGenericos.crearProyecto, data, "POST");
+      //console.log("idApp", res.idApp);
+    }
+    if (modo === "editar") {
+      setTextos(await getData(eDnDImagenArea.textos));
+      setAreas(await getData(eDnDImagenArea.areas));
+    }
+  }, []);
+  */
+
 
   useEffect(() => {
+    const setup = async () => {
+      console.log("setup");
+      if (modo === "insertar") {
+        const res = await sendData(eGenericos.crearProyecto, data, "POST");
+        console.log("idApp", res.idApp);
+      }
+      if (modo === "editar") {
+        setTextos(await getData(eDnDImagenArea.textos));
+        setAreas(await getData(eDnDImagenArea.areas));
+      }
+    };
     setup();
-  }, []);
+  }, [modo]);
+
+
 
   useEffect(() => {
     cargarTextos();
@@ -29,9 +63,16 @@ export default function DndImagenArea(params) {
   }, [areas]);
 
   const setup = async () => {
-    setTextos(await getData(dnDImagenArea.textos));
-    setAreas(await getData (dnDImagenArea.areas) );
-    
+    console.log("setup");
+    if (modo === "insertar") {
+        console.log("<<<< INSERTAR >>>>");
+      //const res = await sendData(eGenericos.crearProyecto, data, "POST");
+      //console.log("idApp", res.idApp);
+    }
+    if (modo === "editar") {
+      setTextos(await getData(eDnDImagenArea.textos));
+      setAreas(await getData(eDnDImagenArea.areas));
+    }
   };
 
   const cargarTextos = () => {
@@ -54,34 +95,33 @@ export default function DndImagenArea(params) {
       retroIncorrecta: refRetroincorrecta.current.value,
     };
     console.log("datos a enviar al servidor", data);
-    const res = await sendData(dnDImagenArea.textos, data);
+    const res = await sendData(eDnDImagenArea.textos, data);
     console.log(res);
   };
 
-  const handleCrearArea = async () => {      
+  const handleCrearArea = async () => {
     const data = {
       titulo: refTituloArea.current.value,
       backgroundColor: refColorAreaFondo.current.value,
-      color: refColorAreaTexto.current.value
-    }
+      color: refColorAreaTexto.current.value,
+    };
     console.log("Datos a enviar", data);
-    const res = await sendData(dnDImagenArea.areas, data, "POST");
+    const res = await sendData(eDnDImagenArea.areas, data, "POST");
     console.log("res", res);
 
     //REacarga nuevamente las areas con datos del backend
-    setAreas(await getData (dnDImagenArea.areas) );
+    setAreas(await getData(eDnDImagenArea.areas));
   };
-
 
   const handleEliminarArea = async (e) => {
     const data = {
-      id: e.currentTarget.id
-    }
-    console.log ("datos a enviar en eliminar area:", data)
-    const res = await sendData(dnDImagenArea.areas, data, "DELETE");
+      id: e.currentTarget.id,
+    };
+    console.log("datos a enviar en eliminar area:", data);
+    const res = await sendData(eDnDImagenArea.areas, data, "DELETE");
     console.log(res);
-    setAreas(await getData (dnDImagenArea.areas) );
-  }
+    setAreas(await getData(eDnDImagenArea.areas));
+  };
 
   return (
     <div className="container">
@@ -102,8 +142,7 @@ export default function DndImagenArea(params) {
 
       <div className="row">
         <div className="col-12 text-end">
-          {
-            /*
+          {/*
             <Link
               target="_blank"
               rel="noopener noreferrer"
@@ -111,8 +150,7 @@ export default function DndImagenArea(params) {
             >
               <img className="img-fluid" src="/assets/eyes.png" alt="Ojos" />
             </Link>
-            */
-          }
+            */}
         </div>
       </div>
 
@@ -223,35 +261,30 @@ export default function DndImagenArea(params) {
                 <strong>ÁREAS</strong>
               </Accordion.Header>
               <Accordion.Body>
-                {
-                  
-                  areas &&
-                    areas.map (item => (
-                      <div className="row" key={item.id}>
-                        <div 
-                        className="col-10 pl-2 pt-2 mt-2 mb-2"                         
-                        style={{backgroundColor: item.backgroundColor}} 
-                        >
-                          <h3  style={{color: item.color  }}  >
-                            {item.titulo}
-                          </h3>
-                        </div> 
-                        <div                         
-                        style={{backgroundColor: item.backgroundColor}} 
-                        className="col-2 pl-2 pt-2 mt-2 mb-2 text-end" 
-                        >
-                            <img
-                            id={item.id}  
-                            role={"button"}
-                            onClick={handleEliminarArea}
-                            className="ico-s" 
-                            src="/assets/trash.png" 
-                            alt="basurero" />
-                        </div>                       
+                {areas &&
+                  areas.map((item) => (
+                    <div className="row" key={item.id}>
+                      <div
+                        className="col-10 pl-2 pt-2 mt-2 mb-2"
+                        style={{ backgroundColor: item.backgroundColor }}
+                      >
+                        <h3 style={{ color: item.color }}>{item.titulo}</h3>
                       </div>
-                    ) )
-                    
-                }
+                      <div
+                        style={{ backgroundColor: item.backgroundColor }}
+                        className="col-2 pl-2 pt-2 mt-2 mb-2 text-end"
+                      >
+                        <img
+                          id={item.id}
+                          role={"button"}
+                          onClick={handleEliminarArea}
+                          className="ico-s"
+                          src="/assets/trash.png"
+                          alt="basurero"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 <div className="row">
                   <div className="col-12 alert alert-secondary">
                     Agregar área +
@@ -276,7 +309,6 @@ export default function DndImagenArea(params) {
                       </div>
                     </div>
                     <div className="row">
-                      
                       <div className="col-6">
                         <label className="m-2" htmlFor="inpColorAreaFondo">
                           Seleccione el color de fondo:
@@ -304,22 +336,18 @@ export default function DndImagenArea(params) {
                           ref={refColorAreaTexto}
                         />
                       </div>
-
-
-
                     </div>
-
                     <div className="row">
-                  <div className="col-12 text-end">
-                    <img
-                      src="/assets/diskette.png"
-                      alt="diskete con carpeta"
-                      role="button"
-                      className="img-fluid"
-                      onClick={handleCrearArea}
-                    />
-                  </div>
-                </div>
+                      <div className="col-12 text-end">
+                        <img
+                          src="/assets/diskette.png"
+                          alt="diskete con carpeta"
+                          role="button"
+                          className="img-fluid"
+                          onClick={handleCrearArea}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Accordion.Body>
@@ -329,5 +357,4 @@ export default function DndImagenArea(params) {
       </div>
     </div>
   );
-    
-};
+}
