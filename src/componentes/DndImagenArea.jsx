@@ -41,6 +41,10 @@ export default function DndImagenArea() {
     //console.log("AREAS", areas);
   }, [areas]);
 
+  useEffect(() => {
+    console.log("idApp",idApp);
+  }, [idApp]);
+
   const setup = async () => {
     console.log("setup");
     if (modo === "insertar") {
@@ -80,6 +84,7 @@ export default function DndImagenArea() {
 
   const handleCrearArea = async () => {
     const data = {
+      idArea: refTituloArea.current.value,
       titulo: refTituloArea.current.value,
       backgroundColor: refColorAreaFondo.current.value,
       color: refColorAreaTexto.current.value,
@@ -89,7 +94,9 @@ export default function DndImagenArea() {
     console.log("res", res);
 
     //REacarga nuevamente las areas con datos del backend
-    setAreas(await getData(eDnDImagenArea.areas+idApp ));
+    //setAreas(await getData(eDnDImagenArea.areas+idApp ));
+    //Carga el estado de la respuesta del 
+    setAreas(res.areas);
   };
 
   const handleEliminarArea = async (e) => {
@@ -262,7 +269,7 @@ export default function DndImagenArea() {
               <Accordion.Body>
                 {areas &&
                   areas.map((item) => (
-                    <div className="row" key={item.id}>
+                    <div className="row" key={item._id}>
                       <div
                         className="col-10 pl-2 pt-2 mt-2 mb-2"
                         style={{ backgroundColor: item.backgroundColor }}
@@ -280,6 +287,7 @@ export default function DndImagenArea() {
                           className="ico-s"
                           src="/assets/trash.png"
                           alt="basurero"
+                          title="Eliminar area"
                         />
                       </div>
                     </div>
