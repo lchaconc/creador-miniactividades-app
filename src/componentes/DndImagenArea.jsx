@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { sendData, getData } from "gespro-utils";
+import { sendData, getData, sendFormData } from "gespro-utils";
 import { eGenericos, eDnDImagenArea } from "../_endpoints";
 import Accordion from "react-bootstrap/Accordion";
 
@@ -16,22 +16,23 @@ export default function DndImagenArea() {
   const refTituloArea = useRef();
   const refColorAreaFondo = useRef();
   const refColorAreaTexto = useRef();
+  const refImagen = useRef();
+  const refTextoAlternativo = useRef();
+  const refIdArea = useRef();
 
   const [textos, setTextos] = useState(null);
   const [areas, setAreas] = useState(null);
+  const [imagenes, setImagenes] = useState(null);
   const [idApp, setIdApp] = useState(null);
 
-
- 
+  const urlImagenes = "http://localhost:3500/proy/";
 
   useEffect(() => {
-    if (isFirst) {       
-        isFirst = false;
-        setup();       
-    }    
+    if (isFirst) {
+      isFirst = false;
+      setup();
+    }
   }, []);
-
-
 
   useEffect(() => {
     cargarTextos();
@@ -42,15 +43,15 @@ export default function DndImagenArea() {
   }, [areas]);
 
   useEffect(() => {
-    console.log("idApp",idApp);
+    console.log("idApp", idApp);
   }, [idApp]);
 
   const setup = async () => {
     console.log("setup");
     if (modo === "insertar") {
-        console.log("<<<< INSERTAR >>>>");
+      console.log("<<<< INSERTAR >>>>");
       const res = await sendData(eGenericos.crearProyecto, data, "POST");
-      setIdApp(await res.idApp);      
+      setIdApp(await res.idApp);
     }
     if (modo === "editar") {
       setTextos(await getData(eDnDImagenArea.textos));
@@ -78,23 +79,23 @@ export default function DndImagenArea() {
       retroIncorrecta: refRetroincorrecta.current.value,
     };
     console.log("datos a enviar al servidor", data);
-    const res = await sendData(eDnDImagenArea.textos+idApp, data);
+    const res = await sendData(eDnDImagenArea.textos + idApp, data);
     console.log(res);
   };
 
   const handleCrearArea = async () => {
-    const data = {      
+    const data = {
       titulo: refTituloArea.current.value,
       backgroundColor: refColorAreaFondo.current.value,
       color: refColorAreaTexto.current.value,
     };
     console.log("Datos a enviar", data);
-    const res = await sendData(eDnDImagenArea.areas+idApp, data, "POST");
+    const res = await sendData(eDnDImagenArea.areas + idApp, data, "POST");
     console.log("res", res);
 
     //REacarga nuevamente las areas con datos del backend
     //setAreas(await getData(eDnDImagenArea.areas+idApp ));
-    //Carga el estado de la respuesta del 
+    //Carga el estado de la respuesta del
     setAreas(res.areas);
   };
 
@@ -103,26 +104,44 @@ export default function DndImagenArea() {
       id: e.currentTarget.id,
     };
     console.log("datos a enviar en eliminar area:", data);
-    const res = await sendData(eDnDImagenArea.areas+idApp, data, "DELETE");
+    const res = await sendData(eDnDImagenArea.areas + idApp, data, "DELETE");
     console.log(res);
-    setAreas( res.areas );
+    setAreas(res.areas);
   };
 
-  const handlePreview = async ()=> {
-    if (idApp) {
-        const res = await getData ( eGenericos.verProyecto+idApp );
-        window.open(res.url, '_blank');
-    }
+  const handleInsertarImagen = async () => {
+    const image = refImagen.current.files[0];
+    const alt = refTextoAlternativo.current.value;
+    const idArea = refIdArea.current.value;
+    console.log( "CAJA >>>",  image, alt, idArea);
 
-  }
+    const formdata = new FormData();
+    formdata.append("image", image);
+    formdata.append("alt", alt);
+    formdata.append("idArea", idArea);
+
+    const res = await sendFormData(
+      eDnDImagenArea.cajas + idApp,
+      formdata,
+      "POST"
+    );
+    console.log("res", res );
+    setImagenes(res.imagenes);
+  };
+
+  const handlePreview = async () => {
+    if (idApp) {
+      const res = await getData(eGenericos.verProyecto + idApp);
+      window.open(res.url, "_blank");
+    }
+  };
 
   const handleBuild = async () => {
     if (idApp) {
-      const res = await getData (eGenericos.genererProyecto+idApp);
-      window.open(res.url, '_blank');      
+      const res = await getData(eGenericos.genererProyecto + idApp);
+      window.open(res.url, "_blank");
     }
-
-  }
+  };
 
   return (
     <div className="container">
@@ -143,19 +162,22 @@ export default function DndImagenArea() {
 
       <div className="row">
         <div className="col-11 text-end">
-          <img 
-          role={"button"}
-          onClick={handleBuild}
-          className="img-fluid"
-          src="./assets/nube.png"           
-          alt="nube de descarga" />
+          <img
+            role={"button"}
+            onClick={handleBuild}
+            className="img-fluid"
+            src="./assets/nube.png"
+            alt="nube de descarga"
+          />
         </div>
         <div className="col-1 text-end">
-            <img 
+          <img
             role={"button"}
-            onClick={handlePreview}            
-            className="img-fluid" 
-            src="/assets/play.png" alt="boón play" />          
+            onClick={handlePreview}
+            className="img-fluid"
+            src="/assets/play.png"
+            alt="boón play"
+          />
         </div>
       </div>
 
@@ -360,13 +382,29 @@ export default function DndImagenArea() {
               </Accordion.Body>
             </Accordion.Item>
 
-
             <Accordion.Item eventKey="2">
               <Accordion.Header>
                 <strong>IMÁGENES</strong>
               </Accordion.Header>
               <Accordion.Body>
-           
+                <div className="row">
+                  {imagenes &&
+                    imagenes.map(( imagen, i ) => (
+                    <div key={"img"+i}  className="col-3">
+                        <div className="card" >
+                        <img 
+                        src= { urlImagenes + idApp + "/public/assets/"+  imagen.id}  
+                        className="card-img-top" alt="preva de imagen" />
+                        <div className="card-body">
+                          <p className="card-text">
+                            <span> {imagen.alt}   </span>
+                            <span> {imagen.idArea}  </span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    ))}
+                </div>
 
                 <div className="row">
                   <div className="col-12 alert alert-secondary">
@@ -374,11 +412,12 @@ export default function DndImagenArea() {
                     <div className="row">
                       <div className="col-12">
                         <div className="input-group mb-3">
-                          <span
-                            className="input-group-text"
-                            
-                          >
-                            <img  id="inputGroupFileImg" src="./assets/gallery.png" alt="imagen"/>
+                          <span className="input-group-text">
+                            <img
+                              id="inputGroupFileImg"
+                              src="./assets/gallery.png"
+                              alt="imagen"
+                            />
                           </span>
                           <input
                             type="file"
@@ -386,15 +425,14 @@ export default function DndImagenArea() {
                             className="form-control"
                             aria-label="Título de area"
                             aria-describedby="inputGroupFileImg"
-                            //ref={refTituloArea}
+                            ref={refImagen}
                           />
                         </div>
                       </div>
                     </div>
                     <div className="row">
-                      
                       <div className="col-6">
-                      <div className="input-group mb-3">
+                        <div className="input-group mb-3">
                           <span
                             className="input-group-text"
                             id="inputGroupAlternativo"
@@ -407,14 +445,13 @@ export default function DndImagenArea() {
                             className="form-control"
                             aria-label="Texto alternativo de la imagen"
                             aria-describedby="inputGroupAlternativo"
-                            //ref={refTituloArea}
+                            ref={refTextoAlternativo}
                           />
                         </div>
                       </div>
 
                       <div className="col-6">
-
-                      <div className="input-group mb-3">
+                        <div className="input-group mb-3">
                           <span
                             className="input-group-text"
                             id="inputGroupAlternativo"
@@ -422,20 +459,21 @@ export default function DndImagenArea() {
                             Area:
                           </span>
 
-                          <select  className="fomr-control"  id="inputIdArea">
-                            {areas && areas.map ( area => (
-                              <option value={area._id}> {area.titulo} </option>
-                            ) )
-
-                            }
+                          <select
+                            ref={refIdArea}
+                            className="fomr-control"
+                            id="inputIdArea"
+                          >
+                            {areas &&
+                              areas.map((area) => (
+                                <option key={area._id} value={area._id}>
+                                  {" "}
+                                  {area.titulo}{" "}
+                                </option>
+                              ))}
                           </select>
-                        
                         </div>
-
                       </div>
-                   
-                    
-
                     </div>
                     <div className="row">
                       <div className="col-12 text-end">
@@ -444,7 +482,7 @@ export default function DndImagenArea() {
                           alt="diskete con carpeta"
                           role="button"
                           className="img-fluid"
-                          onClick={handleCrearArea}
+                          onClick={handleInsertarImagen}
                         />
                       </div>
                     </div>
@@ -452,9 +490,6 @@ export default function DndImagenArea() {
                 </div>
               </Accordion.Body>
             </Accordion.Item>
-
-
-
           </Accordion>
         </div>
       </div>
