@@ -83,8 +83,7 @@ export default function DndImagenArea() {
   };
 
   const handleCrearArea = async () => {
-    const data = {
-      idArea: refTituloArea.current.value,
+    const data = {      
       titulo: refTituloArea.current.value,
       backgroundColor: refColorAreaFondo.current.value,
       color: refColorAreaTexto.current.value,
@@ -281,7 +280,7 @@ export default function DndImagenArea() {
                         className="col-2 pl-2 pt-2 mt-2 mb-2 text-end"
                       >
                         <img
-                          id={item.id}
+                          id={item._id}
                           role={"button"}
                           onClick={handleEliminarArea}
                           className="ico-s"
