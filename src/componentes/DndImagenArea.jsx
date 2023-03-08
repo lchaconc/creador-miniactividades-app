@@ -261,6 +261,7 @@ export default function DndImagenArea() {
                 </div>
               </Accordion.Body>
             </Accordion.Item>
+
             <Accordion.Item eventKey="1">
               <Accordion.Header>
                 <strong>ÁREAS</strong>
@@ -358,6 +359,102 @@ export default function DndImagenArea() {
                 </div>
               </Accordion.Body>
             </Accordion.Item>
+
+
+            <Accordion.Item eventKey="2">
+              <Accordion.Header>
+                <strong>IMÁGENES</strong>
+              </Accordion.Header>
+              <Accordion.Body>
+           
+
+                <div className="row">
+                  <div className="col-12 alert alert-secondary">
+                    Agregar imagen +
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="input-group mb-3">
+                          <span
+                            className="input-group-text"
+                            
+                          >
+                            <img  id="inputGroupFileImg" src="./assets/gallery.png" alt="imagen"/>
+                          </span>
+                          <input
+                            type="file"
+                            id="image"
+                            className="form-control"
+                            aria-label="Título de area"
+                            aria-describedby="inputGroupFileImg"
+                            //ref={refTituloArea}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      
+                      <div className="col-6">
+                      <div className="input-group mb-3">
+                          <span
+                            className="input-group-text"
+                            id="inputGroupAlternativo"
+                          >
+                            Texto alternativo:
+                          </span>
+                          <input
+                            type="text"
+                            id="txtAlternativoImagen"
+                            className="form-control"
+                            aria-label="Texto alternativo de la imagen"
+                            aria-describedby="inputGroupAlternativo"
+                            //ref={refTituloArea}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-6">
+
+                      <div className="input-group mb-3">
+                          <span
+                            className="input-group-text"
+                            id="inputGroupAlternativo"
+                          >
+                            Area:
+                          </span>
+
+                          <select  className="fomr-control"  id="inputIdArea">
+                            {areas && areas.map ( area => (
+                              <option value={area._id}> {area.titulo} </option>
+                            ) )
+
+                            }
+                          </select>
+                        
+                        </div>
+
+                      </div>
+                   
+                    
+
+                    </div>
+                    <div className="row">
+                      <div className="col-12 text-end">
+                        <img
+                          src="/assets/diskette.png"
+                          alt="diskete con carpeta"
+                          role="button"
+                          className="img-fluid"
+                          onClick={handleCrearArea}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+
+
+
           </Accordion>
         </div>
       </div>
