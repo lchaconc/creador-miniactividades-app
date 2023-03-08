@@ -103,9 +103,9 @@ export default function DndImagenArea() {
       id: e.currentTarget.id,
     };
     console.log("datos a enviar en eliminar area:", data);
-    const res = await sendData(eDnDImagenArea.areas, data, "DELETE");
+    const res = await sendData(eDnDImagenArea.areas+idApp, data, "DELETE");
     console.log(res);
-    setAreas(await getData(eDnDImagenArea.areas));
+    setAreas( res.areas );
   };
 
   const handlePreview = async ()=> {
