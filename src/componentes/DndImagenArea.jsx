@@ -382,7 +382,7 @@ export default function DndImagenArea() {
                 <strong>IMÁGENES</strong>
               </Accordion.Header>
               <Accordion.Body>
-                <div className="row">
+                <div className="row mb-2">
                   {imagenes &&
                     imagenes.map(( imagen, i ) => (
                     <div key={"img"+i}  className="col-2">
