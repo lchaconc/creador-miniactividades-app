@@ -1,12 +1,19 @@
 import actividades from "../data/actividades.json";
 
-export default function Menu({handleCargarForm}) {    
+export default function Menu({handleCargarForm, obtenerMisProyectos }) {    
 
   return (
     <div className="container">
       <div className="row">
-        <div className="col-12">
+        <div className="col-8">
           <h1>MENU</h1>
+        </div>
+        <div className="col-4 text-end">
+          <span>Mis Proyectos</span>
+          <img 
+          role={"button"}
+          onClick={obtenerMisProyectos}
+          src="./assets/folder.png" alt="folde en la nube"  />
         </div>
       </div>
       <div className="row">
