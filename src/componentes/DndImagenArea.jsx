@@ -3,7 +3,6 @@ import { sendData, getData, sendFormData } from "gespro-utils";
 import { eGenericos, eDnDImagenArea } from "../_endpoints";
 import Accordion from "react-bootstrap/Accordion";
 
-
 let idApp;
 
 export default function DndImagenArea() {
@@ -23,12 +22,11 @@ export default function DndImagenArea() {
   const [textos, setTextos] = useState(null);
   const [areas, setAreas] = useState(null);
   const [imagenes, setImagenes] = useState(null);
-  
 
   const urlImagenes = "http://localhost:3500/proy/";
 
   useEffect(() => {
-    setup() 
+    setup();
   }, []);
 
   useEffect(() => {
@@ -108,7 +106,7 @@ export default function DndImagenArea() {
     const image = refImagen.current.files[0];
     const alt = refTextoAlternativo.current.value;
     const idArea = refIdArea.current.value;
-    console.log( "CAJA >>>",  image, alt, idArea);
+    console.log("CAJA >>>", image, alt, idArea);
 
     const formdata = new FormData();
     formdata.append("image", image);
@@ -120,9 +118,17 @@ export default function DndImagenArea() {
       formdata,
       "POST"
     );
-    console.log("res", res );
+    console.log("res", res);
     setImagenes(res.imagenes);
   };
+
+const handleEliminarImagen = async (e)=> {  
+  const data = {idCaja:  e.target.id }
+  const res = await sendData (eDnDImagenArea.cajas+idApp, data, "DELETE" );
+  console.log("res", res);
+    setImagenes(res.imagenes);
+}
+
 
   const handlePreview = async () => {
     if (idApp) {
@@ -384,20 +390,43 @@ export default function DndImagenArea() {
               <Accordion.Body>
                 <div className="row mb-2">
                   {imagenes &&
-                    imagenes.map(( imagen, i ) => (
-                    <div key={"img"+i}  className="col-2">
-                        <div className="card" >
-                        <img 
-                        src= { urlImagenes + idApp + "/public/assets/"+  imagen.id}  
-                        className="img-fluid" alt="preva de imagen" />
-                        <div className="card-body">
-                          <p className="card-text">
-                            <span> {imagen.alt}   </span>
-                            <span> {imagen.idArea}  </span>
-                          </p>
+                    imagenes.map((imagen, i) => (
+                      <div key={"img" + i} className="col-2">
+                        <div className="card">
+                          <div className="card-title text-center">
+                            <div className="row mt-1">
+                              <div className="col-10">
+                                <h4>{imagen.alt}</h4>
+                              </div>
+                              <div className="col-2">
+                                <img
+                                  id={imagen.id}
+                                  role={"button"}
+                                  src="./assets/remove.png"
+                                  alt="equis roja"
+                                  title="Remover imagen"
+                                  onClick={handleEliminarImagen}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <img
+                            src={
+                              urlImagenes +
+                              idApp +
+                              "/public/assets/" +
+                              imagen.id
+                            }
+                            className="img-fluid"
+                            alt="preva de imagen"
+                          />
+                          <div className="card-body">
+                            <p className="card-text">
+                              <strong> {imagen.tituloArea} </strong>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
                     ))}
                 </div>
 
@@ -461,9 +490,8 @@ export default function DndImagenArea() {
                           >
                             {areas &&
                               areas.map((area) => (
-                                <option key={area._id} value={area._id}>
-                                  {" "}
-                                  {area.titulo}{" "}
+                                <option key={area._id} value={area._id}>                                  
+                                  {area.titulo}
                                 </option>
                               ))}
                           </select>
