@@ -3,8 +3,8 @@ import { sendData, getData, sendFormData } from "gespro-utils";
 import { eGenericos, eDnDImagenArea } from "../_endpoints";
 import Accordion from "react-bootstrap/Accordion";
 
-const data = { nombrePlantilla: "dnd_imagen_area" };
-let isFirst = true;
+
+let idApp;
 
 export default function DndImagenArea() {
   const modo = "insertar";
@@ -23,15 +23,12 @@ export default function DndImagenArea() {
   const [textos, setTextos] = useState(null);
   const [areas, setAreas] = useState(null);
   const [imagenes, setImagenes] = useState(null);
-  const [idApp, setIdApp] = useState(null);
+  
 
   const urlImagenes = "http://localhost:3500/proy/";
 
   useEffect(() => {
-    if (isFirst) {
-      isFirst = false;
-      setup();
-    }
+    setup() 
   }, []);
 
   useEffect(() => {
@@ -50,12 +47,10 @@ export default function DndImagenArea() {
     console.log("setup");
     if (modo === "insertar") {
       console.log("<<<< INSERTAR >>>>");
-      const res = await sendData(eGenericos.crearProyecto, data, "POST");
-      setIdApp(await res.idApp);
+      idApp = sessionStorage.getItem("idApp");
     }
     if (modo === "editar") {
-      setTextos(await getData(eDnDImagenArea.textos));
-      setAreas(await getData(eDnDImagenArea.areas));
+      console.log("Editar");
     }
   };
 
@@ -390,11 +385,11 @@ export default function DndImagenArea() {
                 <div className="row">
                   {imagenes &&
                     imagenes.map(( imagen, i ) => (
-                    <div key={"img"+i}  className="col-3">
+                    <div key={"img"+i}  className="col-2">
                         <div className="card" >
                         <img 
                         src= { urlImagenes + idApp + "/public/assets/"+  imagen.id}  
-                        className="card-img-top" alt="preva de imagen" />
+                        className="img-fluid" alt="preva de imagen" />
                         <div className="card-body">
                           <p className="card-text">
                             <span> {imagen.alt}   </span>

@@ -1,6 +1,6 @@
 import actividades from "../data/actividades.json";
 
-export default function Menu({handleCambiarVistas}) {    
+export default function Menu({handleCargarForm}) {    
 
   return (
     <div className="container">
@@ -30,7 +30,7 @@ export default function Menu({handleCambiarVistas}) {
               <button 
                 id={id} 
                 className="btn btn-outline-info" 
-                onClick={handleCambiarVistas}
+                onClick={handleCargarForm}
                 >Crear actividad</button>  
                 </div>            
             </div>
