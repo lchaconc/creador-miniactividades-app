@@ -6,7 +6,7 @@ import Accordion from "react-bootstrap/Accordion";
 let idApp;
 
 export default function DndImagenArea() {
-  const modo = "insertar";
+
 
   const refTextosTitulo = useRef();
   const refTextosInstrucciones = useRef();
@@ -42,13 +42,18 @@ export default function DndImagenArea() {
   }, [idApp]);
 
   const setup = async () => {
-    console.log("setup");
+    const modo = sessionStorage.getItem("modo");    
     if (modo === "insertar") {
       console.log("<<<< INSERTAR >>>>");
       idApp = sessionStorage.getItem("idApp");
     }
     if (modo === "editar") {
       console.log("Editar");
+      const appSeleccionada = JSON.parse(sessionStorage.getItem("appSeleccionada"));
+      setTextos(appSeleccionada.textos);
+      setAreas(appSeleccionada.areas);
+      setImagenes(appSeleccionada.cajas);
+      idApp = appSeleccionada._id;
     }
   };
 
