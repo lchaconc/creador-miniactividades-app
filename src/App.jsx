@@ -23,9 +23,18 @@ function App() {
     setIsLoading(true);
     const res = await sendData(eGenericos.crearProyecto, data, "POST");
     sessionStorage.setItem("idApp", res.idApp);
+    sessionStorage.setItem( "modo", "insertar" );
     setIsLoading(false);
     setCompActual(componentes[idVista]);
   };
+
+
+  const cargarDetallesActividad =(idVista)=> {    
+    sessionStorage.setItem( "modo", "editar" );
+    console.log("id", idVista);
+    setCompActual(componentes[idVista]);
+
+  }
 
   const cargarVistasGenericas =(e)=> {
     const idVista = e.target.id;
@@ -53,7 +62,7 @@ function App() {
   const componentes = {
     menu: <Menu handleCargarForm={handleCargarForm}  cargarVistasGenericas={cargarVistasGenericas}  />,
     dnd_imagen_area: <DndImagenArea cargarVistasGenericas={cargarVistasGenericas} />,
-    mis_proyectos: < MisProyectos />
+    mis_proyectos: < MisProyectos  cargarDetallesActividad={cargarDetallesActividad} />
   };
 
   return (
