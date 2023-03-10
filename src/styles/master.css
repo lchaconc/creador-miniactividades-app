@@ -1,13 +1,24 @@
 .jumbotron {
-    padding: 1em;
-    margin-top: 1em;
-    margin-bottom: 2em;
-    text-align: center;
-    border-radius: 15px;
-    background-color: rgba(40, 116, 166, 0.1);
+  padding: 1em;
+  margin-top: 1em;
+  margin-bottom: 2em;
+  text-align: center;
+  border-radius: 15px;
+  background-color: rgba(40, 116, 166, 0.1);
 }
 
 .img-s {
-    height: 1.5em;
-    width: auto;
+  height: 1.5em;
+  width: auto;
+}
+
+.img-m {
+  height: 4em;
+  width: auto;
+}
+
+.img-m:hover {
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px 8px #888888;
 }
