@@ -1,6 +1,6 @@
 import actividades from "../data/actividades.json";
 
-export default function Menu({handleCargarForm, obtenerMisProyectos }) {    
+export default function Menu({handleCargarForm, cargarVistasGenericas }) {    
 
   return (
     <div className="container">
@@ -10,9 +10,10 @@ export default function Menu({handleCargarForm, obtenerMisProyectos }) {
         </div>
         <div className="col-4 text-end">
           <span>Mis Proyectos</span>
-          <img 
+          <img
+          id="mis_proyectos" 
           role={"button"}
-          onClick={obtenerMisProyectos}
+          onClick={cargarVistasGenericas}
           src="./assets/folder.png" alt="folde en la nube"  />
         </div>
       </div>

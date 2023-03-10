@@ -3,8 +3,9 @@ import Login from "./componentes/Login";
 import Menu from "./componentes/Menu";
 import MisProyectos from "./componentes/MisProyectos";
 import DndImagenArea from "./componentes/DndImagenArea";
-import { sendData, getData } from "gespro-utils";
+import { sendData } from "gespro-utils";
 import {eGenericos} from "./_endpoints";
+import CtxUsurio from "./context/ctxUsuario";
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -35,32 +36,29 @@ function App() {
 
   const handleLogin = () => {
     console.log("login");
-    /*
-    setUsuario({
-      username: "luis.chacon.campos@mep.go.cr"
-    });
-    */
-   setUsuario("luis.chacon.campos@mep.go.cr")
-    setCompActual(componentes.menu);
+    const tmpUsr = {
+      name: "Luis",
+      username: "luis.chacon.campos@mep.go.cr",            
+      token: "123456789abc",
+      blobPhoto: "foto",
+      handleCerrarSesion: "sso.signOut"
+    }
+    setUsuario( tmpUsr);     
+    setCompActual(componentes["menu"]);
   };
 
 
-  const obtenerMisProyectos = async ()=> {
-    setIsLoading(true);
-    console.log("usuario", usuario);    
-    const res = await getData( eGenericos.misProyectos+usuario );
-    setIsLoading(false);
-    setCompActual(<MisProyectos data={res} />);
-    
-  }
+ 
 
   const componentes = {
-    menu: <Menu handleCargarForm={handleCargarForm}  obtenerMisProyectos={obtenerMisProyectos}  />,
+    menu: <Menu handleCargarForm={handleCargarForm}  cargarVistasGenericas={cargarVistasGenericas}  />,
     dnd_imagen_area: <DndImagenArea cargarVistasGenericas={cargarVistasGenericas} />,
+    mis_proyectos: < MisProyectos />
   };
 
   return (
-    <>
+    
+      <CtxUsurio.Provider value={usuario}>
       {!usuario ? <Login handleLogin={handleLogin} /> : compActual}
       {isLoading && (
         <div className="row">
@@ -71,7 +69,7 @@ function App() {
           </div>
         </div>
       )}
-    </>
+    </CtxUsurio.Provider>
   );
 }
 
