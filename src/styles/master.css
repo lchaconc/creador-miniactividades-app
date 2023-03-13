@@ -22,3 +22,14 @@
   padding: 10px;
   box-shadow: 5px 10px 8px #888888;
 }
+
+.btn-jello-c:hover {
+  animation-name: jello;
+  animation-duration: 1s;
+  background-color: #C70039;
+}
+
+.btn-jello:hover {
+  animation-name: jello;
+  animation-duration: 1s;  
+}

@@ -6,6 +6,7 @@ import DndImagenArea from "./componentes/DndImagenArea";
 import { sendData } from "gespro-utils";
 import {eGenericos} from "./_endpoints";
 import CtxUsurio from "./context/ctxUsuario";
+import "animate.css";
 
 function App() {
   const [usuario, setUsuario] = useState(null);

@@ -11,7 +11,7 @@ export default function Login({handleLogin}) {
         </div>
         <div className="row">
             <div className="col-12 text-center">
-                <button className="btn btn-outline-success" onClick={handleLogin} >INICIAR SESIÓN</button>
+                <button className="btn btn-outline-success animate__animated animate__rubberBand" onClick={handleLogin} >INICIAR SESIÓN</button>
             </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ export default function Menu({handleCargarForm, cargarVistasGenericas }) {
           <img
           id="mis_proyectos" 
           role={"button"}
+          className="btn-jello"
           onClick={cargarVistasGenericas}
           src="./assets/folder.png" alt="folde en la nube"  />
         </div>
@@ -37,7 +38,7 @@ export default function Menu({handleCargarForm, cargarVistasGenericas }) {
               <div className="col text-center">
               <button 
                 id={id} 
-                className="btn btn-outline-info" 
+                className="btn btn-outline-info btn-jello-c" 
                 onClick={handleCargarForm}
                 >Crear actividad</button>  
                 </div>            
