@@ -6,8 +6,6 @@ import Accordion from "react-bootstrap/Accordion";
 let idApp;
 
 export default function DndImagenArea() {
-
-
   const refTextosTitulo = useRef();
   const refTextosInstrucciones = useRef();
   const refRetroCorrecta = useRef();
@@ -22,6 +20,12 @@ export default function DndImagenArea() {
   const [textos, setTextos] = useState(null);
   const [areas, setAreas] = useState(null);
   const [imagenes, setImagenes] = useState(null);
+
+  //si el usuario cambia algo en los textos se activa para mostrar el diskete (indica que hay que guardar)
+  const [isTextoPorGuardar, setIsTextoPorGuardar] = useState(false);
+  const [isGuardadnoTexto, setIsGuardadnoTexto] = useState(false);
+
+  const [isAreaPorGuardar, setIsAreaPorGuardar] = useState(false);
 
   const urlImagenes = "http://localhost:3500/proy/";
 
@@ -42,20 +46,23 @@ export default function DndImagenArea() {
   }, [idApp]);
 
   const setup = async () => {
-    const modo = sessionStorage.getItem("modo");    
+    const modo = sessionStorage.getItem("modo");
     if (modo === "insertar") {
       console.log("<<<< INSERTAR >>>>");
       idApp = sessionStorage.getItem("idApp");
     }
     if (modo === "editar") {
       console.log("Editar");
-      const appSeleccionada = JSON.parse(sessionStorage.getItem("appSeleccionada"));
+      const appSeleccionada = JSON.parse(
+        sessionStorage.getItem("appSeleccionada")
+      );
       setTextos(appSeleccionada.textos);
       setAreas(appSeleccionada.areas);
       setImagenes(appSeleccionada.cajas);
       idApp = appSeleccionada._id;
     }
   };
+
 
   const cargarTextos = () => {
     //console.log("textos", textos);
@@ -76,9 +83,12 @@ export default function DndImagenArea() {
       retroCorrecta: refRetroCorrecta.current.value,
       retroIncorrecta: refRetroincorrecta.current.value,
     };
+    setIsGuardadnoTexto(true);
     console.log("datos a enviar al servidor", data);
     const res = await sendData(eDnDImagenArea.textos + idApp, data);
     console.log(res);
+    res.isOk && setIsTextoPorGuardar(false);
+    setIsGuardadnoTexto(false);
   };
 
   const handleCrearArea = async () => {
@@ -95,6 +105,8 @@ export default function DndImagenArea() {
     //setAreas(await getData(eDnDImagenArea.areas+idApp ));
     //Carga el estado de la respuesta del
     setAreas(res.areas);
+    //Limpia el texto del input
+    refTituloArea.current.value = ""
   };
 
   const handleEliminarArea = async (e) => {
@@ -125,15 +137,18 @@ export default function DndImagenArea() {
     );
     console.log("res", res);
     setImagenes(res.imagenes);
+
+    refImagen.current.value = "";
+    refTextoAlternativo.current.value = "";
+
   };
 
-const handleEliminarImagen = async (e)=> {  
-  const data = {idCaja:  e.target.id }
-  const res = await sendData (eDnDImagenArea.cajas+idApp, data, "DELETE" );
-  console.log("res", res);
+  const handleEliminarImagen = async (e) => {
+    const data = { idCaja: e.target.id };
+    const res = await sendData(eDnDImagenArea.cajas + idApp, data, "DELETE");
+    console.log("res", res);
     setImagenes(res.imagenes);
-}
-
+  };
 
   const handlePreview = async () => {
     if (idApp) {
@@ -196,15 +211,24 @@ const handleEliminarImagen = async (e)=> {
               </Accordion.Header>
               <Accordion.Body>
                 <div className="row">
-                  <div className="col-12 text-end">
-                    <img
-                      src="/assets/diskette.png"
-                      alt="diskete con carpeta"
-                      role="button"
-                      className="img-fluid"
-                      onClick={handleEnviarTextos}
-                    />
+                  <div className="col-10 text-end">
+                    {
+                      isGuardadnoTexto && <div className="badge text-bg-success">
+                        Guardando texto. Por favor espere....
+                      </div>
+                    }
                   </div>
+                  {isTextoPorGuardar && (
+                    <div className="col-2 text-end">
+                      <img
+                        src="/assets/diskette.png"
+                        alt="diskete con carpeta"
+                        role="button"
+                        className="img-fluid animate__animated animate__bounce"
+                        onClick={handleEnviarTextos}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="row mt-2">
@@ -220,6 +244,7 @@ const handleEliminarImagen = async (e)=> {
                         aria-label="T´tiulo de la actividad"
                         aria-describedby="inputGroupTitulo"
                         ref={refTextosTitulo}
+                        onChange={ ()=> setIsTextoPorGuardar(true) }
                       />
                     </div>
                   </div>
@@ -241,6 +266,7 @@ const handleEliminarImagen = async (e)=> {
                         aria-label="T´tiulo de la actividad"
                         aria-describedby="inputGroupInstrucciones"
                         ref={refTextosInstrucciones}
+                        onChange={ ()=> setIsTextoPorGuardar(true) }
                       />
                     </div>
                   </div>
@@ -262,6 +288,7 @@ const handleEliminarImagen = async (e)=> {
                         aria-label="Retroaimentación correcta"
                         aria-describedby="inputGroupRetroCorrecta"
                         ref={refRetroCorrecta}
+                        onChange={ ()=> setIsTextoPorGuardar(true) }
                       />
                     </div>
                   </div>
@@ -283,6 +310,7 @@ const handleEliminarImagen = async (e)=> {
                         aria-label="T´tiulo de la actividad"
                         aria-describedby="inputGroupRetroIncorrecta"
                         ref={refRetroincorrecta}
+                        onChange={ ()=> setIsTextoPorGuardar(true) }
                       />
                     </div>
                   </div>
@@ -339,6 +367,7 @@ const handleEliminarImagen = async (e)=> {
                             aria-label="Título de area"
                             aria-describedby="inputGroupTituloArea"
                             ref={refTituloArea}
+                            onChange={ ()=> setIsAreaPorGuardar(true) }
                           />
                         </div>
                       </div>
@@ -373,15 +402,18 @@ const handleEliminarImagen = async (e)=> {
                       </div>
                     </div>
                     <div className="row">
+                    {
+                      isAreaPorGuardar && 
                       <div className="col-12 text-end">
-                        <img
-                          src="/assets/diskette.png"
-                          alt="diskete con carpeta"
-                          role="button"
-                          className="img-fluid"
-                          onClick={handleCrearArea}
-                        />
-                      </div>
+                      <img
+                        src="/assets/diskette.png"
+                        alt="diskete con carpeta"
+                        role="button"
+                        className="img-fluid"
+                        onClick={handleCrearArea}
+                      />
+                    </div>
+                    }
                     </div>
                   </div>
                 </div>
@@ -495,7 +527,7 @@ const handleEliminarImagen = async (e)=> {
                           >
                             {areas &&
                               areas.map((area) => (
-                                <option key={area._id} value={area._id}>                                  
+                                <option key={area._id} value={area._id}>
                                   {area.titulo}
                                 </option>
                               ))}
