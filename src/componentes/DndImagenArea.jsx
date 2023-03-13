@@ -2,10 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { sendData, getData, sendFormData } from "gespro-utils";
 import { eGenericos, eDnDImagenArea } from "../_endpoints";
 import Accordion from "react-bootstrap/Accordion";
+import EncabezadoForms from "./EncabezadoForms";
 
 let idApp;
 
-export default function DndImagenArea() {
+export default function DndImagenArea({cargarVistasGenericas}) {
   const refTextosTitulo = useRef();
   const refTextosInstrucciones = useRef();
   const refRetroCorrecta = useRef();
@@ -166,11 +167,9 @@ export default function DndImagenArea() {
 
   return (
     <div className="container">
-      <div className="row">
-        <div className="col-12 alert alert-info text-center">
-          <h1>Imagen - Área</h1>
-        </div>
-      </div>
+      <EncabezadoForms cargarVistasGenericas={cargarVistasGenericas}>
+        Drag and drop imagen-area
+      </EncabezadoForms>
 
       <div className="row">
         <div className="col-12">
