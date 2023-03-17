@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import CtxUsurio from "../context/ctxUsuario";
 import { getData } from "gespro-utils";
+import dayjs from "dayjs";
+import "dayjs/locale/es";
 import { eGenericos } from "../_endpoints";
 import actividades from "../data/actividades.json";
 
@@ -44,13 +46,14 @@ export default function MisProyectos({cargarDetallesActividad}) {
       </div>
 
       {dndImagenArea &&
-        dndImagenArea.map(({ _id, textos, tipo }) => (
+        dndImagenArea.map(({ _id, textos, tipo, fechaCreacion }) => (
           <div key={_id} className="row alert alert-light">
             <div className="col-10 ">
               <h3>{textos.titulo} </h3>
-              <span className="badge text-bg-primary">
+              <span className="badge text-bg-dark m-2" >
               {actividades.find(actividad => actividad.id === tipo)?.nombre}
               </span>
+              <strong>Creado el {dayjs(fechaCreacion).locale('es').format('DD [de] MMMM [de] YYYY, h:mm:ss A')  }  </strong>
             </div>
             <div className="col-2 text-end">
               <img
