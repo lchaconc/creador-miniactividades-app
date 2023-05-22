@@ -153,14 +153,15 @@ export default function DndImagenArea({cargarVistasGenericas}) {
 
   const handlePreview = async () => {
     if (idApp) {
-      const res = await getData(eGenericos.verProyecto + idApp);
+      const res = await getData(`${eGenericos.verProyecto}${idApp}/dnd_imagen_area`);
+      console.log("res", res);
       window.open(res.url, "_blank");
     }
   };
 
   const handleBuild = async () => {
     if (idApp) {
-      const res = await getData(eGenericos.genererProyecto + idApp);
+      const res = await getData( `${eGenericos.genererProyecto}${idApp}/dnd_imagen_area` );
       window.open(res.url, "_blank");
     }
   };
