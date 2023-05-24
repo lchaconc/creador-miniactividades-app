@@ -3,10 +3,12 @@ import Login from "./componentes/Login";
 import Menu from "./componentes/Menu";
 import MisProyectos from "./componentes/MisProyectos";
 import DndImagenArea from "./componentes/DndImagenArea";
+import EscenariosAprendizaje from "./componentes/EscenariosAprendizaje";
 import { sendData } from "gespro-utils";
 import {eGenericos} from "./_endpoints";
 import CtxUsurio from "./context/ctxUsuario";
 import "animate.css";
+
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -20,11 +22,15 @@ function App() {
   const handleCargarForm = async (e) => {
     const idVista = e.target.id;
     console.log("idVista --------", idVista);
+    
+    /*
     const data = { nombrePlantilla: idVista };
     setIsLoading(true);
     const res = await sendData(eGenericos.crearProyecto, data, "POST");
     sessionStorage.setItem("idApp", res.idApp);
     sessionStorage.setItem( "modo", "insertar" );
+    */
+
     setIsLoading(false);
     setCompActual(componentes[idVista]);
   };
@@ -63,7 +69,8 @@ function App() {
   const componentes = {
     menu: <Menu handleCargarForm={handleCargarForm}  cargarVistasGenericas={cargarVistasGenericas}  />,
     dnd_imagen_area: <DndImagenArea cargarVistasGenericas={cargarVistasGenericas} />,
-    mis_proyectos: < MisProyectos  cargarDetallesActividad={cargarDetallesActividad} />
+    mis_proyectos: < MisProyectos  cargarDetallesActividad={cargarDetallesActividad} />,
+    escenarios_aprendizaje: <EscenariosAprendizaje />
   };
 
   return (

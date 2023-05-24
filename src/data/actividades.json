@@ -13,7 +13,12 @@
         "id": "sel_parrafo",
         "nombre": "Seleccione la opción correcta",
         "descripcion": "Esta es una prueba, bla bla bla."        
-
+    },
+    {
+        "id": "escenarios_aprendizaje",
+        "nombre": "Escenarios de aprendizaje",
+        "descripcion": "Esta es una prueba, bla bla bla."        
     }
 
 ]
+
