@@ -3,11 +3,12 @@ import Modal from "react-bootstrap/Modal";
 
 export default function EscenariosAprendizaje(props) {
   const [show, setShow] = useState(false);
+  const [previaImg, setPreviaImg] = useState(null);
   const [imgFondo, setImgFondo] = useState(null);
-  const [isBg, setIsBg] = useState(false);
+  
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  
 
   const handleLoadFile = (e) => {
     const file = e.target.files[0];
@@ -17,7 +18,7 @@ export default function EscenariosAprendizaje(props) {
     if (file) {
       const reader = new FileReader();
       reader.addEventListener("load", function () {
-        setImgFondo(reader.result);
+        setPreviaImg(reader.result);
       });
 
       reader.readAsDataURL(file);
@@ -25,9 +26,13 @@ export default function EscenariosAprendizaje(props) {
   };
 
   function handleAceptarfondo() {
-    setIsBg(true);
+    setImgFondo(previaImg);    
     setShow(false)
     
+  }
+
+  const handleShowMdLoadImg = ()=> {    
+    setShow(true);
   }
 
   return (
@@ -40,19 +45,19 @@ export default function EscenariosAprendizaje(props) {
         </div>
         <div className="row">
           <div className="col-12">
-            <button id="btnFondo" className="btn btn-info" onClick={handleShow}>              
+            <button id="btnFondo" className="btn btn-info" onClick={handleShowMdLoadImg}>              
               Agreggar Imagen
             </button>
             <button 
             id="btnSprite"
-            onClick={handleShow}
+            onClick={handleShowMdLoadImg}
             className="btn btn-success"> Agregar sprite </button>
           </div>
         </div>
 
         <div className="row">
             {
-                (imgFondo && isBg) &&
+                (imgFondo ) &&
                 <div className="col-12">
                 <img 
                 className="img-fluid"
@@ -71,11 +76,11 @@ export default function EscenariosAprendizaje(props) {
         <Modal.Body>
           <input type="file" id="inputFile" onChange={handleLoadFile} />
           <hr />
-          {imgFondo && (
+          {previaImg && (
             <img
                 className="img-fluid"
               id="imagePreview"
-              src={imgFondo}
+              src={previaImg}
               alt="Vista previa de la imagen"
             ></img>
           )}
