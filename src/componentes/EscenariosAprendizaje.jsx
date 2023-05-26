@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
+import addDragAndDrop from "../utils/draggable";
 
 let nextId = 0;
 
@@ -31,11 +32,11 @@ export default function EscenariosAprendizaje(props) {
   };
 
   function handeGuardarImg() {
-    if (tipoModal === "btnFondo") {
+    if (tipoModal === "fondo") {
       setImgFondo(imgPrevia);
     }
 
-    if (tipoModal === "btnSprite") {
+    if (tipoModal === "sprite") {
       setSprites([
         // with a new array
         ...sprites, // that contains all the old items
@@ -47,7 +48,7 @@ export default function EscenariosAprendizaje(props) {
   }
 
   const handleAbrirModal = (e) => {
-    setTipoModal(e.target.id);
+    setTipoModal(e.target.dataset.modal);
     setShow(true);
     setImgPrevia(null);
   };
@@ -73,6 +74,7 @@ export default function EscenariosAprendizaje(props) {
           <div className="col-12">
             <button
               id="btnFondo"
+              data-modal="fondo"
               className="btn btn-info"
               onClick={handleAbrirModal}
             >
@@ -80,6 +82,7 @@ export default function EscenariosAprendizaje(props) {
             </button>
             <button
               id="btnSprite"
+              data-Modal="sprite"
               onClick={handleAbrirModal}
               className="btn btn-success"
             >
@@ -94,16 +97,26 @@ export default function EscenariosAprendizaje(props) {
             <div id="divFondo" className="col-12" style={estilofondo}>
               {sprites &&
                 sprites.map(
-                  item => (<img key={item.id} src={item.sprite} alt="sprite" />)                  
+                  item => (
+                  <img 
+                  key={item.id} 
+                  onMouseDown={addDragAndDrop} 
+                  className="img-sprite"                  
+                  src={item.sprite} 
+                  alt="sprite" />)
                 )}
             </div>
           )}
         </div>
       </div>
 
-      <Modal size="lg" show={show} onHide={handleClose}>
+      <Modal 
+      size={tipoModal === "fondo" ? "xl" : "sm"} 
+      show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Imagen</Modal.Title>
+          <Modal.Title>
+            {tipoModal === "fondo" ? "Fondo" : "Sprite"  }
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input type="file" id="inputFile" onChange={handleLoadFile} />
