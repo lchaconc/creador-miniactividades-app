@@ -175,7 +175,7 @@ export default function EscenariosAprendizaje(props) {
           {tipoModal === "redim" && (
             <>
               <br />
-              <label for="customRange1" className="form-label">
+              <label htmlFor="customRange1" className="form-label">
                 Redimensión <strong>50%</strong>
               </label>
               <input
