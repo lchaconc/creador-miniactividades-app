@@ -54,9 +54,10 @@ export default function EscenariosAprendizaje(props) {
     console.log("Abrindo modal en modo", tipoModal);
     refMenuContextual.current.style.display = "none";
     setTipoModal(e.target.dataset.modal);
+
     setShow(true);
     if (tipoModal === "redim") {
-      console.log("spriteActual", spriteActual);
+      //console.log("spriteActual", spriteActual);
       setImgPrevia(spriteActual);
     } else {
       setImgPrevia(null);
@@ -130,6 +131,7 @@ export default function EscenariosAprendizaje(props) {
                     onMouseDown={addDragAndDrop}
                     onContextMenu={handleAbrirMenucontextual}
                     className="img-sprite"
+                    name= {item.sprite.file.name}
                     src={item.sprite}
                     alt="sprite"
                   />
