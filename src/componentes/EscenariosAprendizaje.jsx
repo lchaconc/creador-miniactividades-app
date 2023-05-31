@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import addDragAndDrop from "../utils/draggable";
-import { v4 as uuidv4 } from 'uuid';
-
+import resize from "../utils/resize";
+import { v4 as uuidv4 } from "uuid";
 
 export default function EscenariosAprendizaje() {
   const [show, setShow] = useState(false);
-  const [imgPrevia, setImgPrevia] = useState({id:null, base64:null, file: null });
+  const [imgPrevia, setImgPrevia] = useState({
+    id: null,
+    base64: null,
+    file: null,
+  });
   const [imgFondo, setImgFondo] = useState(null);
   const [sprites, setSprites] = useState([]);
   const [tipoModal, setTipoModal] = useState(null);
@@ -34,7 +38,7 @@ export default function EscenariosAprendizaje() {
         setImgPrevia({
           id: uuidv4(),
           base64: reader.result,
-          file: file
+          file: file,
         });
       });
 
@@ -45,7 +49,7 @@ export default function EscenariosAprendizaje() {
   function handeGuardarImg() {
     if (tipoModal === "fondo") {
       console.log(imgPrevia);
-      setImgFondo(imgPrevia);
+      setImgFondo(imgPrevia.base64);
     }
 
     if (tipoModal === "sprite") {
@@ -75,7 +79,27 @@ export default function EscenariosAprendizaje() {
 
   const handleAbrirMenucontextual = (e) => {
     console.log(e.target);
+    const boundingRect = e.target.getBoundingClientRect();
+    console.log("Left:", boundingRect.left);
+    console.log("Top:", boundingRect.top);
+    console.log("Height:", boundingRect.height);
+    console.log("Width:", boundingRect.width);
+
+    // Obtener dimensiones del viewport
+    const viewportWidth =
+      window.innerWidth || document.documentElement.clientWidth;
+    const viewportHeight =
+      window.innerHeight || document.documentElement.clientHeight;
+
+    // Convertir dimensiones a vh y vw
+    const heightInVh = (boundingRect.height / viewportHeight) * 100;
+    const widthInVw = (boundingRect.width / viewportWidth) * 100;
+
+    console.log("Height (vh):", heightInVh);
+    console.log("Width (vw):", widthInVw);
+
     setSpriteActual(sprites[0].sprite);
+
     e.preventDefault();
     refMenuContextual.current.style.display = "block";
     refMenuContextual.current.style.left = e.pageX + "px";
@@ -137,9 +161,10 @@ export default function EscenariosAprendizaje() {
                 sprites.map((item) => (
                   <img
                     key={item.id}
+                    id={item.id}
                     onMouseDown={addDragAndDrop}
                     onContextMenu={handleAbrirMenucontextual}
-                    className="img-sprite"                    
+                    className="img-sprite"
                     src={item.base64}
                     alt={item.file.name}
                   />
@@ -175,7 +200,7 @@ export default function EscenariosAprendizaje() {
                 <img
                   className="img-fluid"
                   id="imagePreview"
-                  src={imgPrevia}
+                  src={imgPrevia.base64}
                   alt="Vista previa de la imagen"
                 ></img>
               </div>
