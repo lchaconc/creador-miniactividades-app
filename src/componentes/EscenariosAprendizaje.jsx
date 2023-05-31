@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import addDragAndDrop from "../utils/draggable";
+import { v4 as uuidv4 } from 'uuid';
 
-let nextId = 0;
 
-export default function EscenariosAprendizaje(props) {
+export default function EscenariosAprendizaje() {
   const [show, setShow] = useState(false);
-  const [imgPrevia, setImgPrevia] = useState(null);
+  const [imgPrevia, setImgPrevia] = useState({id:null, base64:null, file: null });
   const [imgFondo, setImgFondo] = useState(null);
   const [sprites, setSprites] = useState([]);
   const [tipoModal, setTipoModal] = useState(null);
@@ -18,6 +18,10 @@ export default function EscenariosAprendizaje(props) {
     console.log(tipoModal);
   }, [tipoModal]);
 
+  useEffect(() => {
+    console.log(sprites);
+  }, [sprites]);
+
   const handleClose = () => setShow(false);
 
   const handleLoadFile = (e) => {
@@ -27,7 +31,11 @@ export default function EscenariosAprendizaje(props) {
     if (file) {
       const reader = new FileReader();
       reader.addEventListener("load", function () {
-        setImgPrevia(reader.result);
+        setImgPrevia({
+          id: uuidv4(),
+          base64: reader.result,
+          file: file
+        });
       });
 
       reader.readAsDataURL(file);
@@ -36,6 +44,7 @@ export default function EscenariosAprendizaje(props) {
 
   function handeGuardarImg() {
     if (tipoModal === "fondo") {
+      console.log(imgPrevia);
       setImgFondo(imgPrevia);
     }
 
@@ -43,7 +52,7 @@ export default function EscenariosAprendizaje(props) {
       setSprites([
         // with a new array
         ...sprites, // that contains all the old items
-        { id: nextId++, sprite: imgPrevia }, // and one new item at the end
+        { id: imgPrevia.id, base64: imgPrevia.base64, file: imgPrevia.file }, // and one new item at the end
       ]);
     }
 
@@ -130,10 +139,9 @@ export default function EscenariosAprendizaje(props) {
                     key={item.id}
                     onMouseDown={addDragAndDrop}
                     onContextMenu={handleAbrirMenucontextual}
-                    className="img-sprite"
-                    name= {item.sprite.file.name}
-                    src={item.sprite}
-                    alt="sprite"
+                    className="img-sprite"                    
+                    src={item.base64}
+                    alt={item.file.name}
                   />
                 ))}
             </div>
