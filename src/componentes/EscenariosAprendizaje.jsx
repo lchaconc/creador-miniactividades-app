@@ -23,7 +23,10 @@ export default function EscenariosAprendizaje() {
   }, [tipoModal]);
 
   useEffect(() => {
-    console.log(sprites);
+    if (sprites) {
+      console.log("sprites", sprites);  
+    }
+    
   }, [sprites]);
 
   const handleClose = () => setShow(false);
@@ -52,11 +55,19 @@ export default function EscenariosAprendizaje() {
       setImgFondo(imgPrevia.base64);
     }
 
-    if (tipoModal === "sprite") {
+    if (tipoModal === "sprite") {      
       setSprites([
         // with a new array
         ...sprites, // that contains all the old items
-        { id: imgPrevia.id, base64: imgPrevia.base64, file: imgPrevia.file }, // and one new item at the end
+        { 
+          id: imgPrevia.id, 
+          base64: imgPrevia.base64, 
+          file: imgPrevia.file,
+          h: null,
+          w: null,
+          x: null,
+          y: null
+         }, // and one new item at the end
       ]);
     }
 
@@ -78,13 +89,9 @@ export default function EscenariosAprendizaje() {
   };
 
   const handleAbrirMenucontextual = (e) => {
-    console.log(e.target);
+    const idSprite = e.target.id;  
     const boundingRect = e.target.getBoundingClientRect();
-    console.log("Left:", boundingRect.left);
-    console.log("Top:", boundingRect.top);
-    console.log("Height:", boundingRect.height);
-    console.log("Width:", boundingRect.width);
-
+    
     // Obtener dimensiones del viewport
     const viewportWidth =
       window.innerWidth || document.documentElement.clientWidth;
@@ -98,6 +105,8 @@ export default function EscenariosAprendizaje() {
     console.log("Height (vh):", heightInVh);
     console.log("Width (vw):", widthInVw);
 
+    updateSpriteProperties (idSprite, heightInVh, widthInVw)
+    
     setSpriteActual(sprites[0].sprite);
 
     e.preventDefault();
@@ -105,6 +114,24 @@ export default function EscenariosAprendizaje() {
     refMenuContextual.current.style.left = e.pageX + "px";
     refMenuContextual.current.style.top = e.pageY + "px";
   };
+
+  const updateSpriteProperties = (id, newH, newW) => {
+    const index = sprites.findIndex((sprite) => sprite.id === id);
+  
+    if (index !== -1) {
+      const updatedSprites = [...sprites]; // Crear una copia del arreglo sprites
+  
+      // Modificar las propiedades h y w del objeto encontrado
+      updatedSprites[index] = {
+        ...updatedSprites[index],
+        h: newH,
+        w: newW
+      };
+  
+      setSprites(updatedSprites); // Actualizar el estado sprites con la copia modificada
+    }
+  };
+  
 
   const handleCerrarMenu = () => {
     refMenuContextual.current.style.display = "none";
