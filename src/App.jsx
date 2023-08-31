@@ -23,13 +23,13 @@ function App() {
     const idVista = e.target.id;
     console.log("idVista --------", idVista);
     
-    /*
+    
     const data = { nombrePlantilla: idVista };
     setIsLoading(true);
     const res = await sendData(eGenericos.crearProyecto, data, "POST");
     sessionStorage.setItem("idApp", res.idApp);
     sessionStorage.setItem( "modo", "insertar" );
-    */
+    
 
     setIsLoading(false);
     setCompActual(componentes[idVista]);

@@ -25,7 +25,6 @@ export default function DndImagenArea({cargarVistasGenericas}) {
   //si el usuario cambia algo en los textos se activa para mostrar el diskete (indica que hay que guardar)
   const [isTextoPorGuardar, setIsTextoPorGuardar] = useState(false);
   const [isGuardadnoTexto, setIsGuardadnoTexto] = useState(false);
-
   const [isAreaPorGuardar, setIsAreaPorGuardar] = useState(false);
 
   const urlImagenes = "http://localhost:3500/proy/";
