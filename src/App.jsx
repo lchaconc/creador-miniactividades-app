@@ -8,6 +8,7 @@ import { sendData } from "gespro-utils";
 import {eGenericos} from "./_endpoints";
 import CtxUsurio from "./context/ctxUsuario";
 import "animate.css";
+import DndTxtImagen from "./componentes/DndTxtImagen";
 
 
 function App() {
@@ -61,14 +62,12 @@ function App() {
     }
     setUsuario( tmpUsr);     
     setCompActual(componentes["menu"]);
-  };
-
-
- 
+  }; 
 
   const componentes = {
     menu: <Menu handleCargarForm={handleCargarForm}  cargarVistasGenericas={cargarVistasGenericas}  />,
     dnd_imagen_area: <DndImagenArea cargarVistasGenericas={cargarVistasGenericas} />,
+    dnd_txt_img: <DndTxtImagen cargarVistasGenericas={cargarVistasGenericas} />,
     mis_proyectos: < MisProyectos  cargarDetallesActividad={cargarDetallesActividad} />,
     escenarios_aprendizaje: <EscenariosAprendizaje />
   };
