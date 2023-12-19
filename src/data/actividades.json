@@ -2,22 +2,22 @@
     {
         "id": "dnd_imagen_area",
         "nombre": "Arrastre y suelte imágenes",
-        "descripcion": "Esta es una prueba, bla bla bla."        
+        "descripcion": "Descripción de la actividad arrastre y suelte."
     },
     {
         "id": "dnd_txt_img",
         "nombre": "Arrastre el texto debajo de la imagen",
-        "descripcion": "Esta es una prueba, bla bla bla."        
+        "descripcion": "Descripción de la actividad  Arrastre el texto."
     },
     {
         "id": "sel_parrafo",
         "nombre": "Seleccione la opción correcta",
-        "descripcion": "Esta es una prueba, bla bla bla."        
+        "descripcion": "Descripción de la actividad Selección opción correcta." 
     },
     {
         "id": "escenarios_aprendizaje",
         "nombre": "Escenarios de aprendizaje",
-        "descripcion": "Esta es una prueba, bla bla bla."        
+        "descripcion": "Descripción de la actividad Escenarios de Aprendizaje."
     }
 
 ]
